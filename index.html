@@ -5,7 +5,7 @@
 		<!-- Meta Tags -->
 		<meta charset="utf-8"/>
 		<!-- Stylesheets -->
-		<link rel="stylesheet" href="styles/reset.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,900italic' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="css/style.css"/> 
 	</head>
@@ -47,16 +47,14 @@
 			
 			<h2 id="feedback">Make your Guess!</h2>
 
-			<form>
+			<form id="guessForm">
 				<input type="text" name="userGuess" id="userGuess" class="text" maxlength="3" autocomplete="off" placeholder="Enter your Guess" required/>
       			<input type="submit" id="guessButton" class="button" name="submit" value="Guess"/>
 			</form>
 			
       		<p>Guess #<span id="count">0</span>!</p>
 			
-			<ul id="guessList" class="guessBox clearfix">
-
-			</ul>
+			<ul id="guessList" class="guessBox clearfix"></ul>
 
 		</section>
 		<!-- JavaScript -->
