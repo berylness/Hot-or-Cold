@@ -1,6 +1,8 @@
 
 $(document).ready(function(){
-	
+
+    var guessCount = 0;
+
 /*--- Display information modal box ---*/
   	$(".what").click(function(){
     	$(".overlay").fadeIn(1000);
@@ -13,97 +15,127 @@ $(document).ready(function(){
   	});
 
 
-/*--- Refresh Page and start fresh game upon page load or userclick on "new" text ---*/
-	function newGame();
-
-	$(".new").click(function(){
-	newGame();
-	});
-
-
+/*--- Refresh Page and start new game ---*/
+	function newGame(){
+    secretNumber();
+  };
+   
+/*--- Refresh Page if user clicks on "new" text ---*/   
+	  $(".new").click(function(){
+	     newGame();
+     });
+     
+	  
 /*--- Randomly Generate a new Secret Number for a new game---*/
 	function secretNumber(){
+
     secretNumber = (Math.floor(Math.random()*100));
+    };
+    
     secretNumber();
-  });
 
+  
 
-/*--- Accept User Guess input ---*/
-	$("form").submit(function(event) {
+/*--- Accept User Guess input (without refreshing the page)---*/
+	  $("#guessForm").on('submit',function(event){
 		event.preventDefault();
 
-		var guess = $("#userGuess").val();
-	}
+    pushToArray();
+
+/*--- Increments Guess Counter Display---*/
+    guessCount=guessCount+1;
+    showCount();
+
+/*---Calculates Guess's Distance from Secret Number---*/
+    var guess = $("#userGuess").val();
+    var choice = numberValidate(guess);
+    if(choice){
+        var guessDifference = Math.abs(guess - secretNumber);
+        checkTemp(guessDifference);
+     } else{
+      $("#userGuess").val("");
+     }
+
+/*--- Clears out each new guess after its input ---*/
+    var guess = $("#guessForm")[0].reset();
+
+
+/*--- Displays the Guessed Numbers in an Array ---*/
+  function pushToArray() {
+      $("#guessList").append("<li>" + $('#userGuess').val() + "</li>");
+  };
+
+});
+
+
+
+/*--- Display User Guesses Count and Increment ---*/
+  function showCount() {
+      $("#count").text(guessCount);
+  };
+
 
 
 
 /*--- Valiate User Guess input ---*/
-		
+	function numberValidate(userGuess){
+
 		/*-- Is Guess a Number? --*/
 		if(isNaN(userGuess)) {
 			$("#feedback").text("Please enter an actual number");
-			return true;
+			return false;
 		}
 		/*-- Is Guess Within Allowed Range? --*/
 		else if(userGuess < 1 || userGuess > 100) {
 			$("#feedback").text("Please enter a number bewteen 1 - 100");
-			return true;
+			return false;
 		}
 
 		/*-- Is Guess a Whole Number? --*/
-		else if(Math.floor(userGuess) != guess) {
+		else if(Math.floor(userGuess) != userGuess) {
 			$("#feedback").text("Please enter a whole number");
-			return true;		
+			return false;		
 		}
 	
 		/*-- Was a value input in the field? --*/
-		else if(userGuess) === "") {
+		else if(userGuess === "") {
 			$("#feedback").text("Please enter a guess");
-			return true;		
+			return false;		
 		}
 
 		else {
-  			return false;
-  		};
-  		
-
-/*--- Verify the number wasn't previously guessed ---*/
+  			return true;
+  	}
+  };
 
 
 
-/*--- Display User Guesses in an Array ---*/
-	 function pushToArray(userGuess) {
-	   	guesses.push(guess);
-	}
-
-/*--- Display User Guesses Count and Increment ---*/
-    function showCount(count) {
-      $('#count').text(guessCount);
-    }
 
 
 /*--- Check temp of guess, display feedback ---*/
-  	function checkTemp(guessDifference){
+ 
+  function checkTemp(guessDifference) {
   		if (guessDifference == 0) {
-  			setFeedback("Good Guess! You Won!");
+  			$("#feedback").text("Good Guess! You Won!");
   			won = true;
   			return false;
   		} else if (guessDifference < 10) {
-  			setFeedback("Very hot!");
+  			$("#feedback").text("Very hot!");
   			return true;
   		} else if (guessDifference >= 10 && guessDifference <= 19) {
-  			setFeedback("Getting hotter!");
+  			$("#feedback").text("Getting hotter!");
   			return true;
   		} else if (guessDifference >= 20 && guessDifference <= 29) {
-  			setFeedback("Warm-ish!");
+  			$("#feedback").text("Warm-ish!");
   			return true;
   		} else if (guessDifference >= 30 && guessDifference <= 39) {
-  			setFeedback("Cold!");
+  			$("#feedback").text("Cold!");
   			return true;
   		} else {
-  			setFeedback("Ice Cold!");
+  			$("#feedback").text("Ice Cold!");
   			return true;
   		}
-  	}
+  }
+});
 
 
